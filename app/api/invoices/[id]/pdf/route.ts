@@ -32,7 +32,7 @@ export async function GET(
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('company_name, address, siret, plan')
+    .select('company_name, address, siret, plan, logo_url')
     .eq('id', user.id)
     .single()
 
@@ -48,6 +48,7 @@ export async function GET(
         company_name: profile?.company_name,
         company_address: profile?.address,
         company_siret: profile?.siret,
+        company_logo_url: profile?.logo_url,
         plan: (profile?.plan as 'free' | 'pro') ?? 'free',
         client,
         items: invoice.invoice_items ?? [],

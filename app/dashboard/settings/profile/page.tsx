@@ -1,12 +1,20 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { updateProfile } from './actions'
+import { updateProfile, uploadLogo } from './actions'
+
+const errorMessages: Record<string, string> = {
+  pro_required: 'Le logo personnalisé est réservé au plan Pro.',
+  no_file: 'Choisis un fichier avant de valider.',
+  invalid_type: 'Le fichier doit être une image (PNG, JPG...).',
+  upload_failed: "L'envoi a échoué, réessaie.",
+}
 
 export default async function ProfileSettingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string }>
+  searchParams: Promise<{ success?: string; error?: string }>
 }) {
-  const { success } = await searchParams
+  const { success, error } = await searchParams
   const supabase = await createClient()
   const {
     data: { user },
@@ -14,9 +22,11 @@ export default async function ProfileSettingsPage({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('company_name, full_name, address, siret')
+    .select('company_name, full_name, address, siret, plan, logo_url')
     .eq('id', user!.id)
     .single()
+
+  const isPro = profile?.plan === 'pro'
 
   return (
     <div className="max-w-xl">
@@ -25,11 +35,60 @@ export default async function ProfileSettingsPage({
         Ces informations apparaissent sur tes devis et factures PDF.
       </p>
 
-      {success && (
+      {success === '1' && (
         <p className="mb-4 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
           Informations enregistrées.
         </p>
       )}
+      {success === 'logo' && (
+        <p className="mb-4 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
+          Logo mis à jour.
+        </p>
+      )}
+      {error && (
+        <p className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+          {errorMessages[error] ?? 'Une erreur est survenue.'}
+        </p>
+      )}
+
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-1 text-sm font-semibold text-slate-900">Logo</h2>
+        <p className="mb-4 text-sm text-slate-500">Affiché en haut de tes devis et factures PDF.</p>
+
+        {profile?.logo_url && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.logo_url}
+            alt="Logo actuel"
+            className="mb-4 h-16 w-auto rounded border border-slate-200 object-contain p-2"
+          />
+        )}
+
+        {isPro ? (
+          <form action={uploadLogo} className="flex items-center gap-3">
+            <input
+              type="file"
+              name="logo"
+              accept="image/*"
+              required
+              className="text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200"
+            />
+            <button
+              type="submit"
+              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+            >
+              Envoyer
+            </button>
+          </form>
+        ) : (
+          <p className="text-sm text-slate-500">
+            Réservé au plan Pro.{' '}
+            <Link href="/dashboard/settings/billing" className="text-indigo-600 underline">
+              Passer au plan Pro
+            </Link>
+          </p>
+        )}
+      </div>
 
       <form action={updateProfile} className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <div>

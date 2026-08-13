@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer'
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 11, fontFamily: 'Helvetica', color: '#1e293b' },
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   totalLabel: { fontSize: 13, fontWeight: 700, marginRight: 10 },
   totalValue: { fontSize: 13, fontWeight: 700 },
   footer: { position: 'absolute', bottom: 30, left: 40, right: 40, fontSize: 8, color: '#94a3b8' },
+  logo: { maxHeight: 50, maxWidth: 160, marginBottom: 8, objectFit: 'contain' },
   watermark: {
     position: 'absolute',
     top: '45%',
@@ -38,6 +39,7 @@ export type InvoiceForPdf = {
   company_name?: string | null
   company_address?: string | null
   company_siret?: string | null
+  company_logo_url?: string | null
   plan?: 'free' | 'pro'
   client: { name: string; email?: string | null; address?: string | null }
   items: { description: string; quantity: number; unit_price: number }[]
@@ -54,6 +56,9 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceForPdf }) {
 
         <View style={styles.header}>
           <View>
+            {!isFree && invoice.company_logo_url && (
+              <Image src={invoice.company_logo_url} style={styles.logo} />
+            )}
             <Text style={styles.title}>{invoice.type === 'quote' ? 'DEVIS' : 'FACTURE'}</Text>
             <Text>{invoice.company_name || 'Klaro'}</Text>
             {invoice.company_address && <Text style={styles.label}>{invoice.company_address}</Text>}

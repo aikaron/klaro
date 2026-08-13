@@ -6,6 +6,7 @@ create table if not exists public.profiles (
   full_name text,
   address text,
   siret text,
+  logo_url text,
   plan text not null default 'free', -- 'free' | 'pro'
   stripe_customer_id text,
   stripe_subscription_id text,
@@ -75,3 +76,17 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- Stockage des logos : crée d'abord un bucket "logos" en Public dans Storage,
+-- puis exécute ces policies (storage.objects appartient au schéma géré par Supabase).
+create policy "logos_insert_own" on storage.objects for insert
+  with check (bucket_id = 'logos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "logos_update_own" on storage.objects for update
+  using (bucket_id = 'logos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "logos_delete_own" on storage.objects for delete
+  using (bucket_id = 'logos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "logos_public_read" on storage.objects for select
+  using (bucket_id = 'logos');
