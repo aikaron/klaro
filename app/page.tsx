@@ -20,7 +20,7 @@ const plans = [
     name: 'Gratuit',
     price: '0€',
     period: '',
-    features: ['5 factures / mois', 'Export PDF avec filigrane Klaro', 'Clients illimités'],
+    features: ['5 factures / mois', 'Export PDF avec filigrane MonKlaro', 'Clients illimités'],
     cta: 'Commencer gratuitement',
     href: '/signup',
   },
@@ -38,7 +38,7 @@ export default function Home() {
   return (
     <div className="flex-1 bg-white text-slate-900">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <span className="text-xl font-bold text-indigo-600">Klaro</span>
+        <span className="text-xl font-bold text-indigo-600">MonKlaro</span>
         <nav className="flex items-center gap-4 text-sm font-medium">
           <Link href="/login" className="text-slate-600 hover:text-slate-900">
             Connexion
@@ -57,7 +57,7 @@ export default function Home() {
           Fini les factures bricolées sous Word.
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600">
-          Klaro est l&apos;outil de devis et factures pensé pour les auto-entrepreneurs et
+          MonKlaro est l&apos;outil de devis et factures pensé pour les auto-entrepreneurs et
           freelances français. Crée, envoie, suis tes paiements — en quelques clics.
         </p>
         <div className="mt-8 flex justify-center gap-4">
@@ -109,7 +109,7 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-slate-100 py-8 text-center text-sm text-slate-400">
-        © {new Date().getFullYear()} Klaro
+        © {new Date().getFullYear()} MonKlaro
       </footer>
     </div>
   )

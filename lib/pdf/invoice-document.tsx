@@ -52,7 +52,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceForPdf }) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {isFree && <Text style={styles.watermark}>KLARO</Text>}
+        {isFree && <Text style={styles.watermark}>MONKLARO</Text>}
 
         <View style={styles.header}>
           <View>
@@ -60,7 +60,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceForPdf }) {
               <Image src={invoice.company_logo_url} style={styles.logo} />
             )}
             <Text style={styles.title}>{invoice.type === 'quote' ? 'DEVIS' : 'FACTURE'}</Text>
-            <Text>{invoice.company_name || 'Klaro'}</Text>
+            <Text>{invoice.company_name || 'MonKlaro'}</Text>
             {invoice.company_address && <Text style={styles.label}>{invoice.company_address}</Text>}
             {invoice.company_siret && <Text style={styles.label}>SIRET : {invoice.company_siret}</Text>}
           </View>
@@ -109,7 +109,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceForPdf }) {
 
         {isFree && (
           <Text style={styles.footer}>
-            Document généré gratuitement avec Klaro
+            Document généré gratuitement avec MonKlaro
           </Text>
         )}
       </Page>

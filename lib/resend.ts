@@ -10,4 +10,4 @@ export function getResend(): Resend {
 }
 
 // Domaine partagé de test Resend — fonctionne sans vérifier de nom de domaine.
-export const REMINDER_FROM = 'Klaro <onboarding@resend.dev>'
+export const REMINDER_FROM = 'MonKlaro <onboarding@resend.dev>'

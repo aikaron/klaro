@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="flex min-h-screen bg-slate-50">
       <aside className="w-60 shrink-0 border-r border-slate-200 bg-white">
         <div className="px-5 py-5">
-          <span className="text-lg font-bold text-indigo-600">Klaro</span>
+          <span className="text-lg font-bold text-indigo-600">MonKlaro</span>
         </div>
         <nav className="flex flex-col gap-1 px-3">
           {links.map((link) => (
